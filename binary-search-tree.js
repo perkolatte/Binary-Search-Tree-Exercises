@@ -54,21 +54,21 @@ class BinarySearchTree {
       return this;
     }
 
-    function recursiveTraverse(currentNode) {
-      if (currentNode === null) {
+    function insertVal(node) {
+      if (node === null) {
         return new Node(val);
-      } else if (val < currentNode.val) {
-        currentNode.left = recursiveTraverse(currentNode.left);
-        return currentNode;
-      } else if (val > currentNode.val) {
-        currentNode.right = recursiveTraverse(currentNode.right);
-        return currentNode;
+      } else if (val < node.val) {
+        node.left = insertVal(node.left);
+        return node;
+      } else if (val > node.val) {
+        node.right = insertVal(node.right);
+        return node;
       } else {
-        return;
+        return node;
       }
     }
 
-    recursiveTraverse(this.root);
+    insertVal(this.root);
     return this;
   }
 
