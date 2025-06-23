@@ -48,28 +48,26 @@ class BinarySearchTree {
   /** insertRecursively(val): insert a new node into the BST with value val.
    * Returns the tree. Uses recursion. */
 
-  insertRecursively(val) {
-    if (this.root === null) {
-      this.root = new Node(val);
+  insertRecursively(val, subtreeRoot = this.root) {
+    // Public entry: Seed recursion and enable chaining
+    if (arguments.length === 1) {
+      this.root = this.insertRecursively(val, this.root);
       return this;
     }
 
-    function insertVal(node) {
-      if (node === null) {
-        return new Node(val);
-      } else if (val < node.val) {
-        node.left = insertVal(node.left);
-        return node;
-      } else if (val > node.val) {
-        node.right = insertVal(node.right);
-        return node;
-      } else {
-        return node;
-      }
+    // Base case: Insert val at null subtree root
+    if (!subtreeRoot) {
+      return new Node(val);
     }
 
-    insertVal(this.root);
-    return this;
+    // Determine side of subtree to recurse into
+    // Keep recursing down until base case is reached
+    if (val < subtreeRoot.val) {
+      subtreeRoot.left = this.insertRecursively(val, subtreeRoot.left);
+    } else if (val > subtreeRoot.val) {
+      subtreeRoot.right = this.insertRecursively(val, subtreeRoot.right);
+    }
+    return subtreeRoot;
   }
 
   /** find(val): search the tree for a node with value val.
