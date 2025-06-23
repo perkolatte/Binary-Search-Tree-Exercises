@@ -68,14 +68,32 @@ class BinarySearchTree {
       }
     }
 
-    insertVal(this.root);
+    this.root = insertVal(this.root);
     return this;
   }
 
   /** find(val): search the tree for a node with value val.
    * return the node, if found; else undefined. Uses iteration. */
 
-  find(val) {}
+  find(val) {
+    if (this.root === null) {
+      return undefined;
+    }
+
+    let node = this.root;
+
+    while (true) {
+      if (val === node.val) {
+        return node;
+      } else if (val < node.val && node.left) {
+        node = node.left;
+      } else if (val > node.val && node.right) {
+        node = node.right;
+      } else {
+        return undefined;
+      }
+    }
+  }
 
   /** findRecursively(val): search the tree for a node with value val.
    * return the node, if found; else undefined. Uses recursion. */
