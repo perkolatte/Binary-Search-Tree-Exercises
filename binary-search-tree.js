@@ -123,11 +123,11 @@ class BinarySearchTree {
    * Return an array of visited nodes. */
 
   dfsPreOrder() {
-    const visitedNodes = [];
-
     if (!this.root) {
-      return visitedNodes;
+      return [];
     }
+
+    const visitedNodes = [];
 
     function tourSubtree(node) {
       visitedNodes.push(node.val);
@@ -146,7 +146,26 @@ class BinarySearchTree {
   /** dfsInOrder(): Traverse the array using in-order DFS.
    * Return an array of visited nodes. */
 
-  dfsInOrder() {}
+  dfsInOrder() {
+    const visitedNodes = [];
+
+    if (!this.root) {
+      return visitedNodes;
+    }
+
+    function tourSubtree(node) {
+      if (node.left) {
+        tourSubtree(node.left);
+      }
+      visitedNodes.push(node.val);
+      if (node.right) {
+        tourSubtree(node.right);
+      }
+    }
+
+    tourSubtree(this.root);
+    return visitedNodes;
+  }
 
   /** dfsPostOrder(): Traverse the array using post-order DFS.
    * Return an array of visited nodes. */
