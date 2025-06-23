@@ -25,20 +25,21 @@ class BinarySearchTree {
       if (val < currentNode.val) {
         if (currentNode.left) {
           currentNode = currentNode.left;
-          continue;
         } else {
           currentNode.left = new Node(val);
           break;
         }
-      }
-      if (val > currentNode.val) {
+      } else if (val > currentNode.val) {
         if (currentNode.right) {
           currentNode = currentNode.right;
-          continue;
         } else {
           currentNode.right = new Node(val);
           break;
         }
+      } else {
+        // val is equal to currentNode.val.
+        // Break to avoid creating a duplicate node.
+        break;
       }
     }
     return this;
