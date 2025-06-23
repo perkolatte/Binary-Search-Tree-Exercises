@@ -103,26 +103,45 @@ class BinarySearchTree {
       return undefined;
     }
 
-    function searchSubtree(node) {
+    function searchSubtreeForVal(node) {
       if (val === node.val) {
         return node;
       } else if (val < node.val && node.left) {
-        return searchSubtree(node.left);
+        return searchSubtreeForVal(node.left);
       } else if (val > node.val && node.right) {
-        return searchSubtree(node.right);
+        return searchSubtreeForVal(node.right);
       } else {
         return undefined;
       }
     }
 
-    return searchSubtree(this.root);
+    return searchSubtreeForVal(this.root);
     // return undefined;
   }
 
   /** dfsPreOrder(): Traverse the array using pre-order DFS.
    * Return an array of visited nodes. */
 
-  dfsPreOrder() {}
+  dfsPreOrder() {
+    const visitedNodes = [];
+
+    if (!this.root) {
+      return visitedNodes;
+    }
+
+    function tourSubtree(node) {
+      visitedNodes.push(node.val);
+      if (node.left) {
+        tourSubtree(node.left);
+      }
+      if (node.right) {
+        tourSubtree(node.right);
+      }
+    }
+
+    tourSubtree(this.root);
+    return visitedNodes;
+  }
 
   /** dfsInOrder(): Traverse the array using in-order DFS.
    * Return an array of visited nodes. */
