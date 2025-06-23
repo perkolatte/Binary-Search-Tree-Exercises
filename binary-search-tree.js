@@ -147,11 +147,11 @@ class BinarySearchTree {
    * Return an array of visited nodes. */
 
   dfsInOrder() {
-    const visitedNodes = [];
-
     if (!this.root) {
-      return visitedNodes;
+      return [];
     }
+
+    const visitedNodes = [];
 
     function tourSubtree(node) {
       if (node.left) {
@@ -170,12 +170,51 @@ class BinarySearchTree {
   /** dfsPostOrder(): Traverse the array using post-order DFS.
    * Return an array of visited nodes. */
 
-  dfsPostOrder() {}
+  dfsPostOrder() {
+    if (!this.root) {
+      return [];
+    }
+
+    const visitedNodes = [];
+
+    function tourSubtree(node) {
+      if (node.left) {
+        tourSubtree(node.left);
+      }
+      if (node.right) {
+        tourSubtree(node.right);
+      }
+      visitedNodes.push(node.val);
+    }
+
+    tourSubtree(this.root);
+    return visitedNodes;
+  }
 
   /** bfs(): Traverse the array using BFS.
    * Return an array of visited nodes. */
 
-  bfs() {}
+  bfs() {
+    if (!this.root) {
+      return [];
+    }
+
+    const toVisit = [this.root];
+    const visitedNodes = [];
+
+    while (toVisit.length > 0) {
+      let node = toVisit.shift();
+      visitedNodes.push(node.val);
+      if (node.left) {
+        toVisit.push(node.left);
+      }
+      if (node.right) {
+        toVisit.push(node.right);
+      }
+    }
+
+    return visitedNodes;
+  }
 
   /** Further Study!
    * remove(val): Removes a node in the BST with the value val.
