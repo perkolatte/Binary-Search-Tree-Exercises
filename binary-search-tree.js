@@ -102,21 +102,20 @@ class BinarySearchTree {
     if (this.root === null) {
       return undefined;
     }
+    return this._searchSubtreeForVal(val, this.root);
+  }
 
-    function searchSubtreeForVal(node) {
-      if (val === node.val) {
-        return node;
-      } else if (val < node.val && node.left) {
-        return searchSubtreeForVal(node.left);
-      } else if (val > node.val && node.right) {
-        return searchSubtreeForVal(node.right);
-      } else {
-        return undefined;
-      }
+  _searchSubtreeForVal(val, node) {
+    if (node === null) {
+      return undefined;
     }
-
-    return searchSubtreeForVal(this.root);
-    // return undefined;
+    if (val === node.val) {
+      return node;
+    } else if (val < node.val) {
+      return this._searchSubtreeForVal(val, node.left);
+    } else if (val > node.val) {
+      return this._searchSubtreeForVal(val, node.right);
+    }
   }
 
   /** dfsPreOrder(): Traverse the array using pre-order DFS.
@@ -220,7 +219,71 @@ class BinarySearchTree {
    * remove(val): Removes a node in the BST with the value val.
    * Returns the removed node. */
 
-  remove(val) {}
+  remove(val) {
+    if (this.root === null) {
+      return undefined;
+    }
+
+    const _searchSubtreeForValWithParent = (
+      val,
+      node = this.root,
+      parent = undefined,
+      leftOrRight
+    ) => {
+      if (node === null) {
+        return undefined;
+      }
+      if (val === node.val && parent === undefined) {
+        // val is in root node
+        return [node];
+      } else if (val === node.val) {
+        return [node, parent, leftOrRight];
+      } else if (val < node.val) {
+        return _searchSubtreeForValWithParent(val, node.left, node, "left");
+      } else if (val > node.val) {
+        return _searchSubtreeForValWithParent(val, node.right, node, "right");
+      }
+    };
+
+    const findSmallestInSubtree = (node, parent) => {
+      if (node.left) {
+        return findSmallestInSubtree(node.left, node);
+      } else {
+        return [node, parent];
+      }
+    };
+
+    const destroyNodeNeatly = (node, parent = undefined, leftOrRight) => {
+      if (parent === undefined) {
+        this.root = undefined;
+      } else if (!node.left && !node.right) {
+        // Case 1: Node has no children
+        parent[leftOrRight] = null;
+      } else if (node.left && !node.right) {
+        // Case 2: Node has only left child
+        parent[leftOrRight] = node.left;
+      } else if (node.right && !node.left) {
+        // Case 3: Node has only right child
+        parent[leftOrRight] = node.right;
+      } else if (node.left && node.right) {
+        // Case 3: Node has two children
+        const [smallest, smallestParent] = findSmallestInSubtree(
+          node.right,
+          node
+        );
+        node.val = smallest.val;
+        if (smallestParent.left === smallest) {
+          smallestParent.left = smallest.right;
+        } else {
+          smallestParent.right = smallest.right;
+        }
+      }
+    };
+
+    const nodeToDestroyWithParent = _searchSubtreeForValWithParent(val);
+    if (!nodeToDestroyWithParent) return undefined;
+    return destroyNodeNeatly(...nodeToDestroyWithParent);
+  }
 
   /** Further Study!
    * isBalanced(): Returns true if the BST is balanced, false otherwise. */
