@@ -288,7 +288,36 @@ class BinarySearchTree {
   /** Further Study!
    * isBalanced(): Returns true if the BST is balanced, false otherwise. */
 
-  isBalanced() {}
+  isBalanced() {
+    if (this.root === null) {
+      return true;
+    }
+
+    function checkHeightAndBalance(node) {
+      if (!node) {
+        return { height: -1, isBalanced: true };
+      }
+
+      const leftHeight = checkHeightAndBalance(node.left);
+      const rightHeight = checkHeightAndBalance(node.right);
+
+      if (!leftHeight.isBalanced || !rightHeight.isBalanced) {
+        return { height: 0, isBalanced: false };
+      }
+
+      const currentHeight = Math.max(leftHeight.height, rightHeight.height) + 1;
+
+      const currentIsBalanced =
+        Math.abs(leftHeight.height - rightHeight.height) <= 1;
+
+      return {
+        height: currentHeight,
+        isBalanced: currentIsBalanced,
+      };
+    }
+
+    return checkHeightAndBalance(this.root).isBalanced;
+  }
 
   /** Further Study!
    * findSecondHighest(): Find the second highest value in the BST, if it exists.
