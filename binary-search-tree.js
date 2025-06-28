@@ -145,26 +145,67 @@ class BinarySearchTree {
   /** dfsInOrder(): Traverse the array using in-order DFS.
    * Return an array of visited nodes. */
 
+  // Iterative:
   dfsInOrder() {
     if (!this.root) {
       return [];
     }
-
+    let node = this.root;
+    const toVisit = []; // This is our stack
     const visitedNodes = [];
 
-    function tourSubtree(node) {
-      if (node.left) {
-        tourSubtree(node.left);
-      }
-      visitedNodes.push(node.val);
-      if (node.right) {
-        tourSubtree(node.right);
-      }
+    // Phase 1: Go all the way left from the root, pushing parents onto the stack.
+    while (node.left) {
+      toVisit.push(node);
+      node = node.left;
     }
 
-    tourSubtree(this.root);
+    // Phase 2: Visit nodes and traverse the rest of the tree.
+    while (true) {
+      // Visit the current node. It's always the leftmost in its current subtree.
+      visitedNodes.push(node.val);
+
+      // If there's a right child, the next node to process is the leftmost node of that right subtree.
+      if (node.right) {
+        node = node.right;
+        // Again, go all the way left from this new node.
+        while (node.left) {
+          toVisit.push(node);
+          node = node.left;
+        }
+      } else if (toVisit.length > 0) {
+        // If there's no right child, we've finished a subtree.
+        // Backtrack to the parent by popping from the stack.
+        node = toVisit.pop();
+      } else {
+        // If there's no right child and no parent to pop, we are done.
+        break;
+      }
+    }
     return visitedNodes;
   }
+
+  // Recursive:
+  // dfsInOrder() {
+  //   if (!this.root) {
+  //     return [];
+  //   }
+
+  //   const visitedNodes = [];
+
+  //   function tourSubtree(node) {
+  //     if (node.left) {
+  //       tourSubtree(node.left);
+  //     }
+  //     visitedNodes.push(node.val);
+  //     if (node.right) {
+  //       tourSubtree(node.right);
+  //     }
+  //   }
+
+  //   tourSubtree(this.root);
+  //   return visitedNodes;
+  // }
 
   /** dfsPostOrder(): Traverse the array using post-order DFS.
    * Return an array of visited nodes. */
